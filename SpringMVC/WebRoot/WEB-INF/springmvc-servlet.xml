@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans      
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd      
+	http://www.springframework.org/schema/tx         
+	http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- 【配置映射处理器】 -->
+	
+	<!-- SpringMVC自带的映射处理器均实现了Spring的Ordered接口，这意味着我们可以在应用系统中声明多个处理器映射 -->
+	<!-- 并且可以设置它们的优先级，这主要体现在order属性上，其值越小，则对应的该映射处理器的优先级越高 -->
+	<!-- 本例中，SimpleUrlHandlerMapping的order值比BeanNameUrlHandlerMapping的小 -->
+	<!-- 这意味着DispatcherServlet在映射URL的时候，首先会咨询SimpleUrlHandlerMapping -->
+	<!-- 只有在SimpleUrlHandlerMapping无法返回结果时，才咨询BeanNameUrlHandlerMapping -->
+	<bean id="beanNameUrlMapping"
+		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+		<property name="order" value="1" />
+	</bean>
+	<bean id="simpleUrlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="order" value="0" />
+		<property name="mappings">
+			<props>
+				<prop key="/userlist22.htm">userController</prop>
+				<prop key="/userlist33.htm">userController</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- 这里的id="userController"对应的是<bean id="simpleUrlMapping">中的<prop>里面的value -->
+	<bean id="userController" class="com.jadyer.controller.UserController" />
+	
+	
+	<!-- DispatcherServlet使用的默认处理器映射是BeanNameUrlHandlerMapping，它使用URL样式的名字 -->
+	<bean name="/userlist11.htm" class="com.jadyer.controller.UserController" />
+	
+	<bean name="/login.htm" class="com.jadyer.controller.LoginController"></bean>
+</beans>
